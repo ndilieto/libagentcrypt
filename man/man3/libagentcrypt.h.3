@@ -1,0 +1,293 @@
+.TH "libagentcrypt.h" 3 "Sat Jun 8 2019" "Version 1.0.0" "libagentcrypt" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libagentcrypt.h \- Symmetric encryption with SSH Agent
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBagc_encrypt\fP (const char *agent, const char *key_sha256, const uint8_t *cleartext, size_t cleartext_size, size_t pad_size, uint8_t **ciphertext, size_t *ciphertext_size)"
+.br
+.RI "\fIEncrypt and authenticate a block of data, for later decryption by \fBagc_decrypt()\fP \fP"
+.ti -1c
+.RI "int \fBagc_decrypt\fP (const char *agent, const uint8_t *ciphertext, size_t ciphertext_size, uint8_t **cleartext, size_t *cleartext_size)"
+.br
+.RI "\fIDecrypt and verify a block of data encrypted by \fBagc_encrypt()\fP \fP"
+.ti -1c
+.RI "int \fBagc_fencrypt\fP (const char *agent, const char *key_sha256, FILE *f_cleartext, FILE *f_ciphertext)"
+.br
+.RI "\fIEncrypt a file for later decryption by \fBagc_fdecrypt()\fP \fP"
+.ti -1c
+.RI "int \fBagc_fdecrypt\fP (const char *agent, FILE *f_ciphertext, FILE *f_cleartext)"
+.br
+.RI "\fIDecrypt a file encrypted by \fBagc_fencrypt()\fP \fP"
+.ti -1c
+.RI "int \fBagc_to_b64\fP (const uint8_t *in, size_t in_size, char **out, size_t *out_size)"
+.br
+.RI "\fIEncode a block of data into a string (base64 format with no padding) \fP"
+.ti -1c
+.RI "int \fBagc_from_b64\fP (const char *in, uint8_t **out, size_t *out_size)"
+.br
+.RI "\fIDecode a string (base64 format with no padding) to a block of data\&. \fP"
+.ti -1c
+.RI "int \fBagc_version\fP (void)"
+.br
+.RI "\fIReturn the library version\&. \fP"
+.ti -1c
+.RI "void * \fBagc_malloc\fP (size_t size)"
+.br
+.RI "\fIDynamically allocate and lock a secure buffer\&. \fP"
+.ti -1c
+.RI "void \fBagc_free\fP (void *buf, size_t size)"
+.br
+.RI "\fIZero fill, unlock and free a dynamically allocated secure buffer\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int agc_encrypt (const char *agent, const char *key_sha256, const uint8_t *cleartext, size_tcleartext_size, size_tpad_size, uint8_t **ciphertext, size_t *ciphertext_size)"
+
+.PP
+Encrypt and authenticate a block of data, for later decryption by \fBagc_decrypt()\fP 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIagent\fP The ssh-agent UNIX domain socket bind address\&. If NULL the content of the SSH_AUTH_SOCK environment variable is used instead\&. 
+.br
+\fIkey_sha256\fP Pointer to a string containing the SHA256 fingerprint of the SSH key to be used for encryption\&. This can be obtained by running the following command (openssh >= 6\&.8 required): 
+.PP
+.nf
+ssh-add -E sha256 -l 
+.fi
+.PP
+ The string may or may not begin with 'SHA256:' The first key whose fingerprint starts with the string specified is selected\&. If NULL the first key is chosen automatically\&. Only RSA and ED25519 keys are supported\&. 
+.br
+\fIcleartext\fP Pointer to the data to be encrypted\&. 
+.br
+\fIcleartext_size\fP Size of data to be encrypted\&. 
+.br
+\fIpad_size\fP Padding size\&. A chunk of random data no larger than pad_size is added at the end of cleartext, such that the combined cleartext and pad size is a non-zero integer multiple of pad_size\&. A minimum of 16 is enforced if pad_size < 16\&. 
+.br
+\fIciphertext\fP This function allocates the output data buffer dynamically and it stores a pointer to it into *ciphertext upon success\&. The buffer MUST be freed by calling \fBagc_free()\fP after use\&. Do NOT use the standard free() function\&. 
+.br
+\fIciphertext_size\fP The size of the output buffer is stored into *ciphertext_size\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. Reasons for failure include 
+.PD 0
+
+.IP "\(bu" 2
+the key is not available: errno is set to ENOKEY 
+.IP "\(bu" 2
+invalid data returned by ssh-agent: errno is set to EBADMSG 
+.IP "\(bu" 2
+failure to allocate memory: errno is set to ENOMEM 
+.IP "\(bu" 2
+invalid parameters: errno is set to EINVAL 
+.IP "\(bu" 2
+any other C library error, including socket errors while communicating with ssh-agent: errno is left at the value set by the C library 
+.PP
+.RE
+.PP
+
+.SS "int agc_decrypt (const char *agent, const uint8_t *ciphertext, size_tciphertext_size, uint8_t **cleartext, size_t *cleartext_size)"
+
+.PP
+Decrypt and verify a block of data encrypted by \fBagc_encrypt()\fP 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIagent\fP The ssh-agent UNIX domain socket bind address\&. If NULL the content of the SSH_AUTH_SOCK environment variable is used instead\&. 
+.br
+\fIciphertext\fP Pointer to the data to be decrypted\&. 
+.br
+\fIciphertext_size\fP Size of the data to be decrypted\&. 
+.br
+\fIcleartext\fP This function allocates the output data buffer dynamically and it stores a pointer to it into *cleartext upon success\&. The buffer MUST be freed by calling \fBagc_free()\fP after use\&. Do NOT use the standard free() function\&. 
+.br
+\fIcleartext_size\fP The size of the output buffer is stored into *ciphertext_size upon success\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. Reasons for failure include 
+.PD 0
+
+.IP "\(bu" 2
+the ssh key required to decrypt is not available: errno is set to ENOKEY 
+.IP "\(bu" 2
+invalid data returned by ssh-agent or failure to decrypt: errno is set to EBADMSG 
+.IP "\(bu" 2
+failure to allocate memory: errno is set to ENOMEM 
+.IP "\(bu" 2
+invalid parameters: errno is set to EINVAL 
+.IP "\(bu" 2
+any other C library error, including socket errors while communicating with ssh-agent: errno is left at the value set by the C library 
+.PP
+.RE
+.PP
+
+.SS "int agc_fencrypt (const char *agent, const char *key_sha256, FILE *f_cleartext, FILE *f_ciphertext)"
+
+.PP
+Encrypt a file for later decryption by \fBagc_fdecrypt()\fP 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIagent\fP The ssh-agent UNIX domain socket bind address\&. If NULL the content of the SSH_AUTH_SOCK environment variable is used instead\&. 
+.br
+\fIkey_sha256\fP Pointer to a string containing the SHA256 fingerprint of the SSH key to be used for encryption\&. This can be obtained by running the following command (openssh >= 6\&.8 required): 
+.PP
+.nf
+ssh-add -E sha256 -l 
+.fi
+.PP
+ The string may or may not begin with 'SHA256:' The first key whose fingerprint starts with the string specified is selected\&. If NULL the first key is chosen automatically\&. Only RSA and ED25519 keys are supported\&. 
+.br
+\fIf_cleartext\fP Pointer to the input stream\&. Cleartext is read from this stream\&. 
+.br
+\fIf_ciphertext\fP Pointer to the output stream\&. Ciphertext is written to this stream\&. Invalid data may have already been written to the output stream when an error is detected\&. Therefore it may be advisable to use a temporary file for output and delete it upon failure\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. Reasons for failure include 
+.PD 0
+
+.IP "\(bu" 2
+the ssh key required to decrypt is not available: errno is set to ENOKEY 
+.IP "\(bu" 2
+invalid data returned by ssh-agent: errno is set to EBADMSG 
+.IP "\(bu" 2
+failure to allocate memory: errno is set to ENOMEM 
+.IP "\(bu" 2
+invalid parameters: errno is set to EINVAL 
+.IP "\(bu" 2
+any other C library error, including socket errors while communicating with ssh-agent or file errors: errno is left at the value set by the C library 
+.PP
+.RE
+.PP
+
+.SS "int agc_fdecrypt (const char *agent, FILE *f_ciphertext, FILE *f_cleartext)"
+
+.PP
+Decrypt a file encrypted by \fBagc_fencrypt()\fP 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIagent\fP The ssh-agent UNIX domain socket bind address\&. If NULL the content of the SSH_AUTH_SOCK environment variable is used instead\&. 
+.br
+\fIf_ciphertext\fP Pointer to the input stream\&. Ciphertext is read from this stream\&. 
+.br
+\fIf_cleartext\fP Pointer to the output stream\&. Cleartext is written to this stream\&. Invalid data may have already been written to the output stream when an error is detected\&. Therefore it may be advisable to use a temporary file for output and delete it upon failure\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. Reasons for failure include 
+.PD 0
+
+.IP "\(bu" 2
+the ssh key required to decrypt is not available: errno is set to ENOKEY 
+.IP "\(bu" 2
+invalid data returned by ssh-agent or failure to decrypt: errno is set to EBADMSG 
+.IP "\(bu" 2
+failure to allocate memory: errno is set to ENOMEM 
+.IP "\(bu" 2
+invalid parameters: errno is set to EINVAL 
+.IP "\(bu" 2
+any other C library error, including socket errors while communicating with ssh-agent or file errors: errno is left at the value set by the C library 
+.PP
+.RE
+.PP
+
+.SS "int agc_to_b64 (const uint8_t *in, size_tin_size, char **out, size_t *out_size)"
+
+.PP
+Encode a block of data into a string (base64 format with no padding) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIin\fP Pointer to the data to be encoded\&. 
+.br
+\fIin_size\fP Size of the data to be encoded\&. 
+.br
+\fIout\fP This function allocates the output data buffer dynamically and it stores a pointer to it into *out upon success\&. The buffer MUST be freed by calling \fBagc_free()\fP after use\&. Do NOT use the standard free() function\&. 
+.br
+\fIout_size\fP The size of the output buffer is stored into *out_size upon success\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. 
+.RE
+.PP
+
+.SS "int agc_from_b64 (const char *in, uint8_t **out, size_t *out_size)"
+
+.PP
+Decode a string (base64 format with no padding) to a block of data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIin\fP Pointer to a NULL terminated input string 
+.br
+\fIout\fP This function allocates the output data buffer dynamically and it stores a pointer to it into *out upon success\&. The buffer MUST be freed by calling \fBagc_free()\fP after use\&. Do NOT use the standard free() function\&. 
+.br
+\fIout_size\fP The size of the output buffer is stored into *out_size upon success\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 upon success, -1 otherwise\&. 
+.RE
+.PP
+
+.SS "int agc_version (void)"
+
+.PP
+Return the library version\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+an integer encoding the library version as 0xMMmmuu00 (MM=major, mm=minor, uu=micro) 
+.RE
+.PP
+
+.SS "void* agc_malloc (size_tsize)"
+
+.PP
+Dynamically allocate and lock a secure buffer\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP Size of buffer
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+pointer to buffer upon success, NULL otherwise\&. The buffer MUST be freed by calling \fBagc_free()\fP after use\&. Do NOT use the standard free() function\&. 
+.RE
+.PP
+
+.SS "void agc_free (void *buf, size_tsize)"
+
+.PP
+Zero fill, unlock and free a dynamically allocated secure buffer\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIbuf\fP Pointer to buffer\&. If NULL no action is taken\&. 
+.br
+\fIsize\fP Size of buffer\&. It MUST match the buffer size 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libagentcrypt from the source code\&.

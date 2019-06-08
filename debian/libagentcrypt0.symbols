@@ -1,0 +1,10 @@
+libagentcrypt.so.0 libagentcrypt0 #MINVER#
+ agc_decrypt@Base 1.0.0
+ agc_encrypt@Base 1.0.0
+ agc_fdecrypt@Base 1.0.0
+ agc_fencrypt@Base 1.0.0
+ agc_free@Base 1.0.0
+ agc_from_b64@Base 1.0.0
+ agc_malloc@Base 1.0.0
+ agc_to_b64@Base 1.0.0
+ agc_version@Base 1.0.0

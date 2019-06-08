@@ -1,0 +1,147 @@
+AGENTCRYPT(1)
+=============
+:doctype: manpage
+:man source:   agentcrypt
+:man version:  {revision}
+:man manual:   User Commands
+
+
+NAME
+----
+agentcrypt - Symmetric encryption with SSH Agent
+
+
+SYNOPSIS
+--------
+*agentcrypt* ['OPTION']... ['FILE']...
+
+
+DESCRIPTION
+-----------
+*agentcrypt* allows using the keys in the SSH Agent to perform symmetric,
+authenticated encryption and decryption securely without typing passwords.
+It works with both RSA and ED25519 SSH keys including those made available
+to a remote host by SSH Agent forwarding.
+
+Whenever possible each file is replaced by one with the *.acb* or *.act*
+extension (the latter when text mode is enabled) while keeping the same
+ownership modes, access and modification times. Only regular files are
+processed. In particular symbolic links are ignored. Encrypted files can
+be restored to their original form using *agentcrypt -d*.
+
+
+OPTIONS
+-------
+*-c*::
+    By default *agentcrypt* encrypts or decrypts 'FILEs' in place.
+    This option makes it write on *stdout* instead, leaving 'FILEs' unchanged.
+
+*-d*::
+    Enable decrypt mode (default is encrypt)
+
+*-e* 'FINGERPRINT'::
+    Encrypt using a ssh key with the specified SHA256 'FINGERPRINT', which may
+    or may not include the "SHA256:" prefix. For ease of use 'FINGERPRINT'
+    can also be shortened, as long as the beginning is specified.
+    Use 'ssh-add -E sha256 -l' to display fingerprints of available keys
+    (for this to work 'openssh' version 6.8 or later is required).
+ 
+*-f*::
+    Do not ask confirmation before overwriting an already existing file.
+    Additionally enable outputting binary encrypted data to a terminal.
+
+*-h*::
+    Display a brief help
+
+*-k*::
+    Keep (don't delete) input files
+
+*-t*::
+    Text mode: encrypt or decrypt text line by line, output text
+
+*-v*::
+    Verbose mode. Display information about files being processed.
+
+*-V*::
+    Display version
+
+
+USAGE
+-----
+*agentcrypt* 'filename'::
+    Encrypt 'filename' and replace it wiht 'filename.acb'
+
+*agentcrypt -k* 'filename':: 
+    Same, but keep the original
+
+*agentcrypt -e* 'FINGERPRINT' 'filename'::
+    Same, but use the ssh key with the specified 'FINGERPRINT'
+ 
+*agentcrypt -d* 'filename.acb'::
+    Decrypt 'filename.acb' and replace it with 'filename'
+
+*tar zc* 'data' | *agentcrypt* > 'data.tgz.acb'::
+    Archive and encrypt 'data'
+
+*agentcrypt -c -d* 'data.tgz.acb' | *tar zx*::
+    Decrypt and extract 'data.tgz.acb'
+
+*agentcrypt -t* 'filename'::
+    Encrypt the 'filename' text file line by line and replace it with 
+    'filename.act'
+
+*agentcrypt -t -d* 'filename.act'::
+    Decrypt 'filename.act' line by line and replace it with 'filename'
+
+*agentcrypt -t*::
+    Read lines of text from stdin, encrypt them one by one and output
+    encrypted text to stdout. The input *is not* echoed to stdout.
+
+*agentcrypt -t -d*::
+    Read encrypted lines of text from stdin, decrypt them one by one and
+    output decrypted text to stdout. The input is also echoed to stdout.
+
+
+ENVIRONMENT
+-----------
+
+*agentcrypt* takes the path to the SSH Agent UNIX-domain socket from the
+'SSH_AUTH_SOCK' environment variable.
+
+
+EXIT STATUS
+-----------
+*0*::
+    Success
+
+*1*::
+    Failure (syntax or usage error; configuration error; 
+    processing failure; unexpected error).
+
+
+BUGS
+----
+If you believe you have found a bug, please create a new issue at
+https://github.com/ndilieto/libagentcrypt/issues with any applicable
+information. 
+
+
+COPYRIGHT
+---------
+Copyright (C) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>
+
+This file is part of <https://github.com/ndilieto/libagentcrypt>
+
+Permission to use, copy, modify, and/or distribute this software
+for any purpose with or without fee is hereby granted, provided
+that the above copyright notice and this permission notice appear
+in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
+AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
+CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
