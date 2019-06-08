@@ -20,7 +20,7 @@ branch, tagged as upstream/x.x.x
 The following will install the latest release
 
 ```
-export PKG_URL=https://github.com/ndilieto/libagentcrypt/archive/upstream/latest
+export PKG_URL=https://github.com/ndilieto/libagentcrypt/archive/upstream/latest.tar.gz
 mkdir -p libagentcrypt
 wget -O - $PKG_URL | tar zx -C libagentcrypt --strip-components=1
 cd libagentcrypt
