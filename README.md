@@ -30,7 +30,8 @@ make install
 
 ## Bugs and suggestions
 
-If you believe you have found a bug, please log it at https://github.com/ndilieto/uacme/issues
+If you believe you have found a bug, please log it at
+https://github.com/ndilieto/libagentcrypt/issues
 
 If you have any suggestions for improvements, pull requests are welcome.
 
