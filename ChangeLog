@@ -1,6 +1,10 @@
 libagentcrypt change log
 Copyright (C) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>
 
+## [1.0.1] - 2019-06-09
+### Changed
+- fixed formatting of ISC license to ensure GitHub detects it
+
 ## [1.0.0] - 2019-06-08
 ### Added
 - first public release

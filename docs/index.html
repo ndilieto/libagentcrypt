@@ -18,7 +18,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libagentcrypt
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">1.0.1</span>
    </div>
   </td>
  </tr>
@@ -39,18 +39,18 @@
 <div class="title">A library for symmetric encryption with SSH Agent </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h3>Copyright (c) 2019 Nicola Di Lieto</h3>
+<div class="textblock"><h3>Copyright (c) 2019, Nicola Di Lieto <a href="#" onclick="location.href='mai'+'lto:'+'nic'+'ol'+'a.d'+'il'+'iet'+'o@'+'gma'+'il'+'.co'+'m'; return false;">nicol<span style="display: none;">.nosp@m.</span>a.di<span style="display: none;">.nosp@m.</span>lieto<span style="display: none;">.nosp@m.</span>@gma<span style="display: none;">.nosp@m.</span>il.co<span style="display: none;">.nosp@m.</span>m</a></h3>
 <p>Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <h1>Introduction</h1>
 <p>libagentcrypt allows using the keys in the SSH Agent to perform symmetric, authenticated encryption and decryption securely without typing passwords. It works with both RSA and ED25519 SSH keys including those made available to a remote host by SSH Agent forwarding. The library is based on strong encryption routines from <a href="https://www.libsodium.org">libsodium</a>. The source code is maintained on <a href="https://github.com/ndilieto/libagentcrypt">github</a>.</p>
 <h1>Algorithms</h1>
-<p>The SSH Agent protocol only allows the use of secret keys for signing data. Therefore libagentcrypt performs the following process for every symmetric encryption (<a class="el" href="libagentcrypt_8h.html#af2edc5b8b7ab4c5ebab073315f3d1caf" title="Encrypt and authenticate a block of data, for later decryption by agc_decrypt() ">agc_encrypt()</a> function):</p><ul>
+<p>The SSH Agent protocol only allows the use of ssh keys for signing data. Therefore libagentcrypt performs the following process for every symmetric encryption (<a class="el" href="libagentcrypt_8h.html#af2edc5b8b7ab4c5ebab073315f3d1caf" title="Encrypt and authenticate a block of data, for later decryption by agc_decrypt() ">agc_encrypt()</a> function):</p><ul>
 <li>pad the cleartext with random data to a size multiple of the padding size (to hide true message length) and concatenate the original length at the end of the cleartext</li>
 <li>generate a random hash key</li>
 <li>create a nonce by hashing the padded cleartext with the random hash key</li>
 <li>create a challenge by concatenating nonce and ssh key fingerprint</li>
-<li>submit the challenge to the SSH Agent for signing</li>
+<li>submit the challenge to the SSH Agent for signing with the ssh key</li>
 <li>compute the symmetric key by hashing the agent signature data</li>
 <li>encrypt and authenticate the padded cleartext with the nonce and the symmetric key (using libsodium's crypto_secretbox algorithm)</li>
 <li>output the challenge and ciphertext</li>

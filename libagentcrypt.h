@@ -1,22 +1,19 @@
 /**
  * @mainpage A library for symmetric encryption with SSH Agent
  *
- * ### Copyright (c) 2019 Nicola Di Lieto
+ * ### Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
  *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
- * Permission to use, copy, modify, and/or distribute this software
- * for any purpose with or without fee is hereby granted, provided
- * that the above copyright notice and this permission notice appear
- * in all copies.
- *
- * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
- * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
- * AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
- * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
- * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
- * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
- * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  *
  * # Introduction
@@ -30,7 +27,7 @@
  *
  * # Algorithms
  *
- * The SSH Agent protocol only allows the use of secret keys for signing
+ * The SSH Agent protocol only allows the use of ssh keys for signing
  * data. Therefore libagentcrypt performs the following process for every
  * symmetric encryption (agc_encrypt() function):
  * - pad the cleartext with random data to a size multiple of the padding
@@ -39,7 +36,7 @@
  * - generate a random hash key
  * - create a nonce by hashing the padded cleartext with the random hash key
  * - create a challenge by concatenating nonce and ssh key fingerprint
- * - submit the challenge to the SSH Agent for signing
+ * - submit the challenge to the SSH Agent for signing with the ssh key
  * - compute the symmetric key by hashing the agent signature data
  * - encrypt and authenticate the padded cleartext with the nonce and
  *   the symmetric key (using libsodium's crypto_secretbox algorithm)
