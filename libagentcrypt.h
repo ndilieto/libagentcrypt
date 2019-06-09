@@ -88,8 +88,8 @@ make install
  * cannot possibly function with these - it would still encrypt but of course
  * the symmetric key would never be able to be recovered.
  * The encryption functions in libagentcrypt check the key type and fail if it
- * it is not one of RSA or ED25519. Fortunately DSA is obsolete and ECDSA is
- * may even have a NSA backdoor... RSA is still secure as long as the key size
+ * it is not one of RSA or ED25519. Fortunately DSA is obsolete and ECDSA may
+ * even have a NSA backdoor... RSA is still secure as long as the key size
  * is at least 2048. For best security ED25519 keys are recommended.
  *
  * The <a href="agentcrypt.1.html"><b>agentcrypt</b></a> command line utility
@@ -160,7 +160,7 @@ extern "C" {
  *                             *ciphertext_size.
  *
  * @return 0 upon success, -1 otherwise. Reasons for failure include
- * \li the key is not available: errno is set to ENOKEY
+ * \li the ssh key is not available: errno is set to ENOKEY
  * \li invalid data returned by ssh-agent: errno is set to EBADMSG
  * \li failure to allocate memory: errno is set to ENOMEM
  * \li invalid parameters: errno is set to EINVAL
@@ -226,7 +226,7 @@ int agc_decrypt(const char *agent,
  *                             and delete it upon failure.
  *
  * @return 0 upon success, -1 otherwise. Reasons for failure include
- * \li the ssh key required to decrypt is not available: errno is set to ENOKEY
+ * \li the ssh key is not available: errno is set to ENOKEY
  * \li invalid data returned by ssh-agent: errno is set to EBADMSG
  * \li failure to allocate memory: errno is set to ENOMEM
  * \li invalid parameters: errno is set to EINVAL

@@ -617,6 +617,7 @@ static int agent_sign(int fd, string_t *key_blob, const uint8_t *data,
     }
     if (reply->data[offset++] != SIGN_RESPONSE)
     {
+        errno = EBADMSG;
         goto done;
     }
     if (string_get_string(reply, &offset, &sig) <= 0)
@@ -711,7 +712,6 @@ int agc_encrypt(const char *agent, const char *key_sha256,
     if (!buf)
     {
         goto done;
-
     }
     uint8_t *nonce = buf;
     uint8_t *hash = nonce + crypto_secretbox_NONCEBYTES;
@@ -1068,7 +1068,12 @@ int agc_fdecrypt(const char *agent, FILE *f_ciphertext, FILE *f_cleartext)
         goto done;
     }
 
-    crypto_secretstream_xchacha20poly1305_init_pull(&state, header, key);
+    if (crypto_secretstream_xchacha20poly1305_init_pull(&state, header,
+                key) != 0)
+    {
+        errno = EBADMSG;
+        goto done;
+    }
     sodium_memzero(key, key_size);
     while (1)
     {
@@ -1111,5 +1116,18 @@ done:
 
 int agc_version(void)
 {
-    return 0x00000000;
+    int version = 0;
+    unsigned char major, minor, micro;
+    if (sscanf(PACKAGE_VERSION, "%hhu.%hhu.%hhu", &major, &minor, &micro) != 3)
+    {
+        fprintf(stderr, "Failed to determine libagentcrypt version\n");
+        abort();
+    }
+    version += major;
+    version <<= 8;
+    version += minor;
+    version <<= 8;
+    version += micro;
+    version <<= 8;
+    return version;
 }

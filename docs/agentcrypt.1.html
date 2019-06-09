@@ -923,7 +923,7 @@ be restored to their original form using <strong>agentcrypt -d</strong>.</p></di
 <dd>
 <p>
     Read lines of text from stdin, encrypt them one by one and output
-    encrypted text to stdout. The input <strong>is not</strong> echoed to stdout.
+    encrypted text to stdout. If stdin is a terminal, disable input echo.
 </p>
 </dd>
 <dt class="hdlist1">
@@ -931,8 +931,8 @@ be restored to their original form using <strong>agentcrypt -d</strong>.</p></di
 </dt>
 <dd>
 <p>
-    Read encrypted lines of text from stdin, decrypt them one by one and
-    output decrypted text to stdout. The input is also echoed to stdout.
+    Read encrypted lines of text from term, decrypt them one by one and
+    output decrypted text to stdout.
 </p>
 </dd>
 </dl></div>
@@ -998,9 +998,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p></div>
 <div id="footnotes"><hr></div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.1<br>
+Version 1.0.2<br>
 Last updated
- 2019-06-09 14:40:04 CEST
+ 2019-06-09 18:10:20 CEST
 </div>
 </div>
 </body>

@@ -18,7 +18,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libagentcrypt
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
   </td>
  </tr>
@@ -147,7 +147,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 upon success, -1 otherwise. Reasons for failure include <ul>
-<li>the key is not available: errno is set to ENOKEY </li>
+<li>the ssh key is not available: errno is set to ENOKEY </li>
 <li>invalid data returned by ssh-agent: errno is set to EBADMSG </li>
 <li>failure to allocate memory: errno is set to ENOMEM </li>
 <li>invalid parameters: errno is set to EINVAL </li>
@@ -268,7 +268,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 upon success, -1 otherwise. Reasons for failure include <ul>
-<li>the ssh key required to decrypt is not available: errno is set to ENOKEY </li>
+<li>the ssh key is not available: errno is set to ENOKEY </li>
 <li>invalid data returned by ssh-agent: errno is set to EBADMSG </li>
 <li>failure to allocate memory: errno is set to ENOMEM </li>
 <li>invalid parameters: errno is set to EINVAL </li>

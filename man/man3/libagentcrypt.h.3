@@ -1,4 +1,4 @@
-.TH "libagentcrypt.h" 3 "Sun Jun 9 2019" "Version 1.0.1" "libagentcrypt" \" -*- nroff -*-
+.TH "libagentcrypt.h" 3 "Sun Jun 9 2019" "Version 1.0.2" "libagentcrypt" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -82,7 +82,7 @@ ssh-add -E sha256 -l
 .PD 0
 
 .IP "\(bu" 2
-the key is not available: errno is set to ENOKEY 
+the ssh key is not available: errno is set to ENOKEY 
 .IP "\(bu" 2
 invalid data returned by ssh-agent: errno is set to EBADMSG 
 .IP "\(bu" 2
@@ -160,7 +160,7 @@ ssh-add -E sha256 -l
 .PD 0
 
 .IP "\(bu" 2
-the ssh key required to decrypt is not available: errno is set to ENOKEY 
+the ssh key is not available: errno is set to ENOKEY 
 .IP "\(bu" 2
 invalid data returned by ssh-agent: errno is set to EBADMSG 
 .IP "\(bu" 2
