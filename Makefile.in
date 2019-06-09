@@ -402,6 +402,9 @@ dist_man3_MANS = man/man3/agc_decrypt.3 man/man3/agc_fdecrypt.3 \
 		 man/man3/agc_fencrypt.3 man/man3/agc_from_b64.3 \
 		 man/man3/agc_to_b64.3 man/man3/libagentcrypt.h.3
 
+@ENABLE_DOCS_REBUILD_TRUE@SEDSCRIPT = 's/^libagentcrypt.h \\-\ $$/libagentcrypt.h \\-\
+@ENABLE_DOCS_REBUILD_TRUE@	    Symmetric encryption with SSH Agent/'
+
 EXTRA_DIST = README.md LICENSE man/man1/agentcrypt.1.txt docs
 DISTCLEANFILES = $(pkgconfig_DATA)
 all: all-am
@@ -1104,6 +1107,7 @@ libtool: $(LIBTOOL_DEPS)
 @ENABLE_DOCS_REBUILD_TRUE@    $(srcdir)/doxyfile
 @ENABLE_DOCS_REBUILD_TRUE@	if test -d docs; then rm -rf docs/*; fi
 @ENABLE_DOCS_REBUILD_TRUE@	$(DOXYGEN) $(srcdir)/doxyfile
+@ENABLE_DOCS_REBUILD_TRUE@	$(SED) -e $(SEDSCRIPT) -i man/man3/libagentcrypt.h.3
 @ENABLE_DOCS_REBUILD_TRUE@	$(ASCIIDOC) -d manpage -b html5 -a revision=$(VERSION) \
 @ENABLE_DOCS_REBUILD_TRUE@	    -o $@ man/man1/agentcrypt.1.txt
 @ENABLE_DOCS_REBUILD_TRUE@	if test -f doxygen_sqlite3.db; then rm -rf doxygen_sqlite3.db; fi

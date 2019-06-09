@@ -44,10 +44,14 @@ man/man1/agentcrypt.1: man/man1/agentcrypt.1.txt
 
 $(dist_man3_MANS): $(doc_DATA)
 
+SEDSCRIPT = 's/^libagentcrypt.h \\-\ $$/libagentcrypt.h \\-\
+	    Symmetric encryption with SSH Agent/'
+
 docs/agentcrypt.1.html: man/man1/agentcrypt.1.txt libagentcrypt.h \
     $(srcdir)/doxyfile
 	if test -d docs; then rm -rf docs/*; fi
 	$(DOXYGEN) $(srcdir)/doxyfile
+	$(SED) -e $(SEDSCRIPT) -i man/man3/libagentcrypt.h.3
 	$(ASCIIDOC) -d manpage -b html5 -a revision=$(VERSION) \
 	    -o $@ man/man1/agentcrypt.1.txt
 	if test -f doxygen_sqlite3.db; then rm -rf doxygen_sqlite3.db; fi

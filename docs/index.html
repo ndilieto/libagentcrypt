@@ -18,7 +18,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libagentcrypt
-   &#160;<span id="projectnumber">1.0.1</span>
+   &#160;<span id="projectnumber">1.0.2</span>
    </div>
   </td>
  </tr>
@@ -79,7 +79,7 @@ make install
 <li>DSA</li>
 <li>ECDSA</li>
 </ul>
-<p>Signatures made by the first two (ED25519 and RSA) are deterministic, i.e. repeatedly signing the same block of input data always produces the same result. This is not true for DSA and ECDSA keys, therefore libagentcrypt cannot possibly function with these - it would still encrypt but of course the symmetric key would never be able to be recovered. The encryption functions in libagentcrypt check the key type and fail if it it is not one of RSA or ED25519. Fortunately DSA is obsolete and ECDSA is may even have a NSA backdoor... RSA is still secure as long as the key size is at least 2048. For best security ED25519 keys are recommended.</p>
+<p>Signatures made by the first two (ED25519 and RSA) are deterministic, i.e. repeatedly signing the same block of input data always produces the same result. This is not true for DSA and ECDSA keys, therefore libagentcrypt cannot possibly function with these - it would still encrypt but of course the symmetric key would never be able to be recovered. The encryption functions in libagentcrypt check the key type and fail if it it is not one of RSA or ED25519. Fortunately DSA is obsolete and ECDSA may even have a NSA backdoor... RSA is still secure as long as the key size is at least 2048. For best security ED25519 keys are recommended.</p>
 <p>The <a href="agentcrypt.1.html"><b>agentcrypt</b></a> command line utility shows how to use the library.</p>
 <h1>API Information</h1>
 <h2>Headers</h2>
