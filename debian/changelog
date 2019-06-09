@@ -1,3 +1,9 @@
+libagentcrypt (1.0.2-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Nicola Di Lieto <nicola.dilieto@gmail.com>  Sun, 09 Jun 2019 19:27:43 +0200
+
 libagentcrypt (1.0.1-1) unstable; urgency=medium
 
   * New upstream release.
