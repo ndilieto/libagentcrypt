@@ -95,11 +95,11 @@ USAGE
 
 *agentcrypt -t*::
     Read lines of text from stdin, encrypt them one by one and output
-    encrypted text to stdout. The input *is not* echoed to stdout.
+    encrypted text to stdout. If stdin is a terminal, disable input echo.
 
 *agentcrypt -t -d*::
-    Read encrypted lines of text from stdin, decrypt them one by one and
-    output decrypted text to stdout. The input is also echoed to stdout.
+    Read encrypted lines of text from term, decrypt them one by one and
+    output decrypted text to stdout.
 
 
 ENVIRONMENT

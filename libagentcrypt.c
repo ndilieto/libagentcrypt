@@ -1116,5 +1116,18 @@ done:
 
 int agc_version(void)
 {
-    return 0x00000000;
+    int version = 0;
+    unsigned char major, minor, micro;
+    if (sscanf(PACKAGE_VERSION, "%hhu.%hhu.%hhu", &major, &minor, &micro) != 3)
+    {
+        fprintf(stderr, "Failed to determine libagentcrypt version\n");
+        abort();
+    }
+    version += major;
+    version <<= 8;
+    version += minor;
+    version <<= 8;
+    version += micro;
+    version <<= 8;
+    return version;
 }
