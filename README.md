@@ -20,7 +20,7 @@ branch, tagged as upstream/x.x.x
 The following will install the latest release
 
 ```
-export PKG_URL=https://github.com/ndilieto/libagentcrypt/archive/upstream/latest
+export PKG_URL=https://github.com/ndilieto/libagentcrypt/archive/upstream/latest.tar.gz
 mkdir -p libagentcrypt
 wget -O - $PKG_URL | tar zx -C libagentcrypt --strip-components=1
 cd libagentcrypt
@@ -30,24 +30,23 @@ make install
 
 ## Bugs and suggestions
 
-If you believe you have found a bug, please log it at https://github.com/ndilieto/uacme/issues
+If you believe you have found a bug, please log it at
+https://github.com/ndilieto/libagentcrypt/issues
 
 If you have any suggestions for improvements, pull requests are welcome.
 
 ## Copyright
 
-libagentcrypt - Copyright (c) 2019 Nicola Di Lieto
+Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
 
-Permission to use, copy, modify, and/or distribute this software
-for any purpose with or without fee is hereby granted, provided
-that the above copyright notice and this permission notice appear
-in all copies.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
-WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE
-AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR
-CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
-NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
-CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
