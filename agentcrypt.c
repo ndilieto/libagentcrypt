@@ -128,6 +128,12 @@ static int process(const char *agent, const char *name, const char *key,
             if (decrypt)
             {
                 oname = strdup(name);
+                if (!oname)
+                {
+                    warn("strdup failed");
+                    rc = -1;
+                    goto done;
+                }
                 oname[strlen(oname) - 4] = 0;
             }
             else
@@ -135,13 +141,10 @@ static int process(const char *agent, const char *name, const char *key,
                 if (asprintf(&oname, "%s%s", name, ext) < 0)
                 {
                     oname = NULL;
+                    warn("asprintf failed");
+                    rc = -1;
+                    goto done;
                 }
-            }
-            if (!oname)
-            {
-                warn("%s: failed to allocate memory", name);
-                rc = -1;
-                goto done;
             }
 
             if (access(oname, F_OK) == 0)

@@ -1,9 +1,14 @@
 libagentcrypt change log
 Copyright (C) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>
 
+## [1.0.3] - 2019-06-10
+### Changed
+- increased socket timeout from 1 to 10s for slow connections
+- fixed error checking in command line utility
+
 ## [1.0.2] - 2019-06-09
 ### Changed
-- implement agc_version (it was always returning 0 before)
+- implemented agc_version (it was always returning 0 before)
 - minor documentation corrections
 
 ## [1.0.1] - 2019-06-09

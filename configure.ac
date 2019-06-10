@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 AC_PREREQ(2.69)
-AC_INIT([libagentcrypt], [1.0.2])
+AC_INIT([libagentcrypt], [1.0.3])
 AC_COPYRIGHT([Copyright (c) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([build-aux/m4])
