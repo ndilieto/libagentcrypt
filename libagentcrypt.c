@@ -332,7 +332,7 @@ static int agent_cmd(int fd, const string_t *cmd, string_t **reply)
 {
     ssize_t n = -1;
     fd_set rfds;
-    struct timeval tv = {.tv_sec = 0, .tv_usec = 1000000};
+    struct timeval tv = {.tv_sec = 10, .tv_usec = 0};
     size_t buf_size = 0;
     size_t sig_size = 0;
     uint8_t *buf = NULL;
@@ -613,6 +613,7 @@ static int agent_sign(int fd, string_t *key_blob, const uint8_t *data,
     }
     if (agent_cmd(fd, cmd, &reply) < 5)
     {
+        errno = EBADMSG;
         goto done;
     }
     if (reply->data[offset++] != SIGN_RESPONSE)
