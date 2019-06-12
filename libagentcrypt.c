@@ -60,10 +60,19 @@ typedef enum
 
 typedef enum
 {
-    UNSUPPORTED                     = -1,
-    RSA                             = 0,
-    ED25519                         = 1
+    KT_UNSUPPORTED                  = -1,
+    KT_RSA                          = 0,
+    KT_ED25519                      = 1
 } key_type_t;
+
+typedef enum
+{
+    ST_UNSUPPORTED                  = -1,
+    ST_RSA_SHA1                     = 0,
+    ST_RSA_SHA2_256                 = 1,
+    ST_RSA_SHA2_512                 = 2,
+    ST_ED25519                      = 3,
+} sig_type_t;
 
 typedef struct
 {
@@ -297,7 +306,7 @@ static int sock_open(const char *path)
 
 static key_type_t key_type(const string_t *key_blob)
 {
-    key_type_t ret = UNSUPPORTED;
+    key_type_t ret = KT_UNSUPPORTED;
     size_t offset = 0;
     string_t *type = NULL;
     if (string_get_string(key_blob, &offset, &type) < 0)
@@ -306,11 +315,41 @@ static key_type_t key_type(const string_t *key_blob)
     }
     if (strncmp("ssh-rsa", (char *)type->data, type->size) == 0)
     {
-        ret = RSA;
+        ret = KT_RSA;
     }
     if (strncmp("ssh-ed25519", (char *)type->data, type->size) == 0)
     {
-        ret = ED25519;
+        ret = KT_ED25519;
+    }
+done:
+    string_free(type);
+    return ret;
+}
+
+static sig_type_t sig_type(const string_t *sig)
+{
+    sig_type_t ret = ST_UNSUPPORTED;
+    size_t offset = 0;
+    string_t *type = NULL;
+    if (string_get_string(sig, &offset, &type) < 0)
+    {
+        goto done;
+    }
+    if (strncmp("ssh-rsa", (char *)type->data, type->size) == 0)
+    {
+        ret = ST_RSA_SHA1;
+    }
+    if (strncmp("rsa-sha2-256", (char *)type->data, type->size) == 0)
+    {
+        ret = ST_RSA_SHA2_256;
+    }
+    if (strncmp("rsa-sha2-512", (char *)type->data, type->size) == 0)
+    {
+        ret = ST_RSA_SHA2_512;
+    }
+    if (strncmp("ssh-ed25519", (char *)type->data, type->size) == 0)
+    {
+        ret = ST_ED25519;
     }
 done:
     string_free(type);
@@ -469,7 +508,7 @@ static int agent_find_key_sha256(int fd, const char *key_sha256,
         {
             goto done;
         }
-        if (key_type(tmp) != UNSUPPORTED)
+        if (key_type(tmp) != KT_UNSUPPORTED)
         {
             uint8_t h[crypto_hash_sha256_BYTES];
             char h64[sodium_base64_ENCODED_LEN(sizeof(h),
@@ -541,7 +580,7 @@ static int agent_find_key(int fd,
         {
             goto done;
         }
-        if (key_type(tmp) != UNSUPPORTED)
+        if (key_type(tmp) != KT_UNSUPPORTED)
         {
             key_hash(tmp, nonce, h);
             if (!hash || !sodium_memcmp(hash, h, sizeof(h)))
@@ -567,7 +606,8 @@ done:
 }
 
 static int agent_sign(int fd, string_t *key_blob, const uint8_t *data,
-        size_t data_size, uint8_t key[crypto_secretbox_KEYBYTES])
+        size_t data_size, bool *legacy,
+        uint8_t key[crypto_secretbox_KEYBYTES])
 {
     int errno_save;
     int ret = -1;
@@ -579,17 +619,21 @@ static int agent_sign(int fd, string_t *key_blob, const uint8_t *data,
 
     switch (key_type(key_blob))
     {
-        case UNSUPPORTED:
+        case KT_UNSUPPORTED:
             errno = ENOKEY;
             goto done;
 
-        case RSA:
-            flags |= RSA_SHA2_256;
+        case KT_RSA:
+            if (!legacy || !*legacy)
+            {
+                flags = RSA_SHA2_256;
+            }
             break;
 
         default:
             break;
     }
+
     cmd = string_alloc(NULL, 0);
     if (!cmd)
     {
@@ -624,6 +668,10 @@ static int agent_sign(int fd, string_t *key_blob, const uint8_t *data,
     if (string_get_string(reply, &offset, &sig) <= 0)
     {
         goto done;
+    }
+    if (legacy && flags == RSA_SHA2_256 && sig_type(sig) != ST_RSA_SHA2_256)
+    {
+        *legacy = true;
     }
     sodium_memzero(reply->data, reply->size);
     crypto_generichash(key, crypto_secretbox_KEYBYTES, sig->data, sig->size,
@@ -735,7 +783,7 @@ int agc_encrypt(const char *agent, const char *key_sha256,
     {
         goto done;
     }
-    if (agent_sign(fd, key_blob, nonce, data - nonce, key) < 0)
+    if (agent_sign(fd, key_blob, nonce, data - nonce, NULL, key) < 0)
     {
         goto done;
     }
@@ -802,20 +850,29 @@ int agc_decrypt(const char *agent,
         errno = ENOKEY;
         goto done;
     }
-    if (agent_sign(fd, key_blob, nonce, data - nonce, key) < 0)
-    {
-        goto done;
-    }
     buf = agc_malloc(buf_size);
     if (!buf)
     {
         goto done;
     }
-    if (crypto_secretbox_open_easy(buf, data,
-                buf_size + crypto_secretbox_MACBYTES, nonce, key))
+    bool legacy = false;
+    while (1)
     {
-        errno = EBADMSG;
-        goto done;
+        if (agent_sign(fd, key_blob, nonce, data - nonce, &legacy, key) < 0)
+        {
+            goto done;
+        }
+        if (crypto_secretbox_open_easy(buf, data,
+                buf_size + crypto_secretbox_MACBYTES, nonce, key) == 0)
+        {
+            break;
+        }
+        if (legacy)
+        {
+            errno = EBADMSG;
+            goto done;
+        }
+        legacy = true;
     }
     size_t decoded_size = buf[buf_size - 4];
     decoded_size <<= 8;
