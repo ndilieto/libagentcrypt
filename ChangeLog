@@ -1,6 +1,10 @@
 libagentcrypt change log
 Copyright (C) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>
 
+## [1.0.4] - 2019-06-12
+### Changed
+- added compatibility with legacy ssh-agent versions
+
 ## [1.0.3] - 2019-06-10
 ### Changed
 - increased socket timeout from 1 to 10s for slow connections
