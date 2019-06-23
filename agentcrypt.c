@@ -209,6 +209,7 @@ static int process(const char *agent, const char *name, const char *key,
         size_t line_size = 0;
         ssize_t line_length = 0;
         int lno = 0;
+        bool lf = false;
         struct termios oflags, nflags;
         int fd = fileno(input);
         if (fd < 0)
@@ -244,16 +245,32 @@ static int process(const char *agent, const char *name, const char *key,
                     decrypt ? "decrypting" : "encrypting",
                     iname, oname);
         }
-        while (!rc && (line_length = getline(&line, &line_size, input)) != -1)
+        while (!rc && !feof(input) && !ferror(input) &&
+                (line_length = getline(&line, &line_size, input)) != -1)
         {
             uint8_t *buf = NULL;
             size_t buf_size = 0;
             size_t out_size = 0;
-            lno++;
-            if (line_length > 0 && line[line_length-1] == '\n')
+
+            if (lno++ && !lf && fputc('\n', output) == EOF)
             {
+                warn("failed to write to %s", oname);
+                rc = -1;
+                continue;
+            }
+            if (line_length == 0)
+            {
+                break;
+            }
+            if (line[line_length-1] == '\n')
+            {
+                lf = true;
                 line[line_length-1] = 0;
                 line_length--;
+            }
+            else
+            {
+                lf = false;
             }
             if (decrypt)
             {
@@ -261,7 +278,7 @@ static int process(const char *agent, const char *name, const char *key,
                 if (agc_from_b64(line, &buf, &buf_size)
                         || agc_decrypt(agent, buf, buf_size, &out, &out_size)
                         || fwrite(out, 1, out_size, output) != out_size
-                        || fputc('\n', output) == EOF
+                        || (lf && fputc('\n', output) == EOF)
                         || fflush(output) == EOF)
                 {
                     warn("failed to decrypt line %d of %s", lno, iname);
@@ -275,7 +292,8 @@ static int process(const char *agent, const char *name, const char *key,
                 if (agc_encrypt(agent, key, (uint8_t *)line, line_length, 0,
                             &buf, &buf_size) < 0
                         || agc_to_b64(buf, buf_size, &out, &out_size) < 0
-                        || fprintf(output, "%s\n", out) < 0
+                        || fputs(out, output) < 0
+                        || (lf && fputc('\n', output) == EOF)
                         || fflush(output) == EOF)
                 {
                     warn("failed to encrypt line %d of %s", lno, iname);

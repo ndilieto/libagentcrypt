@@ -402,8 +402,8 @@ dist_man3_MANS = man/man3/agc_decrypt.3 man/man3/agc_fdecrypt.3 \
 		 man/man3/agc_fencrypt.3 man/man3/agc_from_b64.3 \
 		 man/man3/agc_to_b64.3 man/man3/libagentcrypt.h.3
 
-@ENABLE_DOCS_REBUILD_TRUE@SEDSCRIPT = 's/^libagentcrypt.h \\-\ $$/libagentcrypt.h \\-\
-@ENABLE_DOCS_REBUILD_TRUE@	    Symmetric encryption with SSH Agent/'
+@ENABLE_DOCS_TRUE@SEDSCRIPT = 's/^libagentcrypt.h \\-\ $$/libagentcrypt.h \\-\
+@ENABLE_DOCS_TRUE@	    Symmetric encryption with SSH Agent/'
 
 EXTRA_DIST = README.md LICENSE man/man1/agentcrypt.1.txt docs
 DISTCLEANFILES = $(pkgconfig_DATA)
@@ -445,8 +445,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
-@ENABLE_DOCS_REBUILD_TRUE@doxyfile: $(top_builddir)/config.status $(srcdir)/doxyfile.in
-@ENABLE_DOCS_REBUILD_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
+@ENABLE_DOCS_TRUE@doxyfile: $(top_builddir)/config.status $(srcdir)/doxyfile.in
+@ENABLE_DOCS_TRUE@	cd $(top_builddir) && $(SHELL) ./config.status $@
 libagentcrypt.pc: $(top_builddir)/config.status $(srcdir)/libagentcrypt.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -990,6 +990,8 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@ENABLE_DOCS_FALSE@install-data-local:
+@ENABLE_DOCS_FALSE@uninstall-local:
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
@@ -1098,26 +1100,26 @@ uninstall-man: uninstall-man1 uninstall-man3
 libtool: $(LIBTOOL_DEPS)
 	$(SHELL) ./config.status libtool
 
-@ENABLE_DOCS_REBUILD_TRUE@man/man1/agentcrypt.1: man/man1/agentcrypt.1.txt
-@ENABLE_DOCS_REBUILD_TRUE@	$(A2X) -d manpage -f manpage -a revision=$(VERSION) $<
+@ENABLE_DOCS_TRUE@man/man1/agentcrypt.1: man/man1/agentcrypt.1.txt
+@ENABLE_DOCS_TRUE@	$(A2X) -L -d manpage -f manpage -a revision=$(VERSION) $<
 
-@ENABLE_DOCS_REBUILD_TRUE@$(dist_man3_MANS): $(doc_DATA)
+@ENABLE_DOCS_TRUE@$(dist_man3_MANS): $(doc_DATA)
 
-@ENABLE_DOCS_REBUILD_TRUE@docs/agentcrypt.1.html: man/man1/agentcrypt.1.txt libagentcrypt.h \
-@ENABLE_DOCS_REBUILD_TRUE@    $(srcdir)/doxyfile
-@ENABLE_DOCS_REBUILD_TRUE@	if test -d docs; then rm -rf docs/*; fi
-@ENABLE_DOCS_REBUILD_TRUE@	$(DOXYGEN) $(srcdir)/doxyfile
-@ENABLE_DOCS_REBUILD_TRUE@	$(SED) -e $(SEDSCRIPT) -i man/man3/libagentcrypt.h.3
-@ENABLE_DOCS_REBUILD_TRUE@	$(ASCIIDOC) -d manpage -b html5 -a revision=$(VERSION) \
-@ENABLE_DOCS_REBUILD_TRUE@	    -o $@ man/man1/agentcrypt.1.txt
-@ENABLE_DOCS_REBUILD_TRUE@	if test -f doxygen_sqlite3.db; then rm -rf doxygen_sqlite3.db; fi
+@ENABLE_DOCS_TRUE@docs/agentcrypt.1.html: man/man1/agentcrypt.1.txt libagentcrypt.h \
+@ENABLE_DOCS_TRUE@    $(srcdir)/doxyfile
+@ENABLE_DOCS_TRUE@	if test -d docs; then rm -rf docs/*; fi
+@ENABLE_DOCS_TRUE@	$(DOXYGEN) $(srcdir)/doxyfile
+@ENABLE_DOCS_TRUE@	$(SED) -e $(SEDSCRIPT) -i man/man3/libagentcrypt.h.3
+@ENABLE_DOCS_TRUE@	$(ASCIIDOC) -d manpage -b html5 -a revision=$(VERSION) \
+@ENABLE_DOCS_TRUE@	    -o $@ man/man1/agentcrypt.1.txt
+@ENABLE_DOCS_TRUE@	if test -f doxygen_sqlite3.db; then rm -rf doxygen_sqlite3.db; fi
 
-install-data-local: $(dist_html_DATA)
-	$(mkinstalldirs) $(DESTDIR)$(docdir)
-	for f in docs/*; do $(INSTALL_DATA) $$f $(DESTDIR)$(docdir); done
+@ENABLE_DOCS_TRUE@install-data-local: $(dist_html_DATA)
+@ENABLE_DOCS_TRUE@	$(mkinstalldirs) $(DESTDIR)$(docdir)
+@ENABLE_DOCS_TRUE@	for f in docs/*; do $(INSTALL_DATA) $$f $(DESTDIR)$(docdir); done
 
-uninstall-local:
-	rm -rf $(DESTDIR)$(docdir)
+@ENABLE_DOCS_TRUE@uninstall-local:
+@ENABLE_DOCS_TRUE@	rm -rf $(DESTDIR)$(docdir)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
