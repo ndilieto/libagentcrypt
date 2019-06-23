@@ -38,9 +38,9 @@ dist_man3_MANS = man/man3/agc_decrypt.3 man/man3/agc_fdecrypt.3 \
 		 man/man3/agc_fencrypt.3 man/man3/agc_from_b64.3 \
 		 man/man3/agc_to_b64.3 man/man3/libagentcrypt.h.3
 
-if ENABLE_DOCS_REBUILD
+if ENABLE_DOCS
 man/man1/agentcrypt.1: man/man1/agentcrypt.1.txt
-	$(A2X) -d manpage -f manpage -a revision=$(VERSION) $<
+	$(A2X) -L -d manpage -f manpage -a revision=$(VERSION) $<
 
 $(dist_man3_MANS): $(doc_DATA)
 
@@ -55,7 +55,6 @@ docs/agentcrypt.1.html: man/man1/agentcrypt.1.txt libagentcrypt.h \
 	$(ASCIIDOC) -d manpage -b html5 -a revision=$(VERSION) \
 	    -o $@ man/man1/agentcrypt.1.txt
 	if test -f doxygen_sqlite3.db; then rm -rf doxygen_sqlite3.db; fi
-endif ENABLE_DOCS_REBUILD
 
 install-data-local: $(dist_html_DATA)
 	$(mkinstalldirs) $(DESTDIR)$(docdir)
@@ -63,6 +62,8 @@ install-data-local: $(dist_html_DATA)
 
 uninstall-local:
 	rm -rf $(DESTDIR)$(docdir)
+
+endif ENABLE_DOCS
 
 EXTRA_DIST = README.md LICENSE man/man1/agentcrypt.1.txt docs
 
