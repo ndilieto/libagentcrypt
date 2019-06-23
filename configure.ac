@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 AC_PREREQ(2.69)
-AC_INIT([libagentcrypt], [1.0.4])
+AC_INIT([libagentcrypt], [1.0.5])
 AC_COPYRIGHT([Copyright (c) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([build-aux/m4])
@@ -64,12 +64,12 @@ PKG_CHECK_MODULES([libsodium], [libsodium >= 1.0.16])
 LIBS="$LIBS $libsodium_LIBS"
 CFLAGS="$CFLAGS $libsodium_CFLAGS"
 
-default_docs_rebuild="no"
-AC_ARG_ENABLE(docs-rebuild,
-  [AC_HELP_STRING([--enable-docs-rebuild], [rebuild documentation])],
-    [],enable_docs_rebuild=$default_docs_rebuild)
-AM_CONDITIONAL([ENABLE_DOCS_REBUILD], [test "x$enable_docs_rebuild" = xyes])
-AM_COND_IF([ENABLE_DOCS_REBUILD],[
+default_docs="yes"
+AC_ARG_ENABLE(docs,
+  [AC_HELP_STRING([--disable-docs], [do not build and install documentation])],
+    [],enable_docs=$default_docs)
+AM_CONDITIONAL([ENABLE_DOCS], [test "x$enable_docs" = xyes])
+AM_COND_IF([ENABLE_DOCS],[
            AC_PATH_PROG([DOXYGEN], [doxygen], [no])
            AS_IF([test "$DOXYGEN" = no], [AC_MSG_ERROR([Could not find doxygen.])])
            AC_PATH_PROG([A2X], a2x, [no])

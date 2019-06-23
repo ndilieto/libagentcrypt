@@ -1,6 +1,11 @@
 libagentcrypt change log
 Copyright (C) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>
 
+## [1.0.5] - 2019-06-23
+### Changed
+- in text mode agentcrypt doesn't output last \n if input lacks it
+- build documentation by default
+
 ## [1.0.4] - 2019-06-12
 ### Changed
 - added compatibility with legacy ssh-agent versions
