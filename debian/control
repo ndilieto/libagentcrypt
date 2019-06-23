@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 10), autoconf-archive, pkg-config,
                docbook-xsl, libxml2-utils, xsltproc, doxygen
 Standards-Version: 4.3.0
 Homepage: https://github.com/ndilieto/libagentcrypt
-Vcs-Git: git://github.com/ndilieto/libagentcrypt
+Vcs-Git: https://github.com/ndilieto/libagentcrypt
 Vcs-Browser: https://github.com/ndilieto/libagentcrypt
 
 Package: libagentcrypt0
@@ -51,4 +51,3 @@ Description: Symmetric encryption with SSH Agent - command line utility
  to a remote host by SSH Agent forwarding.
  .
  This package provides the 'agentcrypt' command line utility
-

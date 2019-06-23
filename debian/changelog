@@ -1,3 +1,9 @@
+libagentcrypt (1.0.5-2) unstable; urgency=medium
+
+  * Fix minor lintian informational warnings
+
+ -- Nicola Di Lieto <nicola.dilieto@gmail.com>  Sun, 23 Jun 2019 14:00:50 +0200
+
 libagentcrypt (1.0.5-1) unstable; urgency=medium
 
   * New upstream release
