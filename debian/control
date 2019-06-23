@@ -2,9 +2,10 @@ Source: libagentcrypt
 Section: libs
 Priority: optional
 Maintainer: Nicola Di Lieto <nicola.dilieto@gmail.com>
-Build-Depends: debhelper (>= 9), pkg-config, autotools-dev, dh-autoreconf, 
-               libsodium-dev (>= 1.0.16)
-Standards-Version: 3.9.6
+Build-Depends: debhelper (>= 10), autoconf-archive, pkg-config,
+               libsodium-dev (>= 1.0.16), asciidoc, docbook-xml,
+               docbook-xsl, libxml2-utils, xsltproc, doxygen
+Standards-Version: 4.3.0
 Homepage: https://github.com/ndilieto/libagentcrypt
 Vcs-Git: git://github.com/ndilieto/libagentcrypt
 Vcs-Browser: https://github.com/ndilieto/libagentcrypt
