@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Nicola Di Lieto <nicola.dilieto@gmail.com>
 Build-Depends: debhelper (>= 11), autoconf-archive, pkg-config,
                libsodium-dev (>= 1.0.16), asciidoc, docbook-xml,
-               docbook-xsl, libxml2-utils, xsltproc, doxygen
+               docbook-xsl, libxml2-utils, xsltproc, doxygen, curl
 Standards-Version: 4.3.0
 Homepage: https://github.com/ndilieto/libagentcrypt
 Vcs-Git: https://github.com/ndilieto/libagentcrypt

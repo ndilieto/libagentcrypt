@@ -1,9 +1,4 @@
-# Debian and upstream are combined in the source repository
-# at https://github.com/ndilieto/libagentcrypt which uses the DEP-14
-# branch layout documented at http://dep.debian.net/deps/dep14
-#
-# The debian source package is maintained in the branch at
-# https://github.com/ndilieto/libagentcrypt/tree/debian/master
-#
-# See also https://wiki.debian.org/PackagingWithGit#Upstream_import_methods
-# and https://www.eyrie.org/~eagle/notes/debian/git.html#combine
+version=3
+opts="filenamemangle=s/(?:.*\/)?upstream\/(\d[\d\.]*)\.tar\.gz/libagentcrypt_$1.orig.tar.gz/" \
+      https://github.com/ndilieto/libagentcrypt/tags (?:.*/)?upstream/(\d[\d\.]*)\.tar\.gz \
+      debian debian/pristine-tar.sh

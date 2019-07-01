@@ -1,3 +1,10 @@
+libagentcrypt (1.0.5-4) unstable; urgency=medium
+
+  * make debian/watch file check upstream git repository
+    and rebuild orig tarball using debian/pristine-tar.sh
+
+ -- Nicola Di Lieto <nicola.dilieto@gmail.com>  Mon, 01 Jul 2019 08:40:04 +0200
+
 libagentcrypt (1.0.5-3) unstable; urgency=medium
 
   * debhelper level increased to 11
