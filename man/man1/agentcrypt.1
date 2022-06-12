@@ -1,13 +1,13 @@
 '\" t
 .\"     Title: agentcrypt
 .\"    Author: [FIXME: author] [see http://docbook.sf.net/el/author]
-.\" Generator: DocBook XSL Stylesheets v1.78.1 <http://docbook.sf.net/>
-.\"      Date: 06/09/2019
+.\" Generator: DocBook XSL Stylesheets v1.79.1 <http://docbook.sf.net/>
+.\"      Date: 06/12/2022
 .\"    Manual: User Commands
-.\"    Source: agentcrypt 1.0.2
+.\"    Source: agentcrypt 1.0.6
 .\"  Language: English
 .\"
-.TH "AGENTCRYPT" "1" "06/09/2019" "agentcrypt 1\&.0\&.2" "User Commands"
+.TH "AGENTCRYPT" "1" "06/12/2022" "agentcrypt 1\&.0\&.6" "User Commands"
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -167,6 +167,8 @@ Read encrypted lines of text from term, decrypt them one by one and output decry
 .SH "ENVIRONMENT"
 .sp
 \fBagentcrypt\fR takes the path to the SSH Agent UNIX\-domain socket from the \fISSH_AUTH_SOCK\fR environment variable\&.
+.sp
+When using RSA keys, if the \fIAGENTCRYPT_LEGACY\fR environment variable is defined and not zero, \fBagentcrypt\fR asks the SSH Agent to produce legacy RSA SHA1 signatures during encryption\&. This is not recommended and is only necessary if the encrypted data need to be decrypted using legacy openssh versions (older than 7\&.2) whose agent did not support RSA SHA256 signatures\&. Note that data encrypted using such legacy versions can always be decrypted correctly without needing to define this variable\&.
 .SH "EXIT STATUS"
 .PP
 \fB0\fR

@@ -1,7 +1,7 @@
 /**
  * @mainpage A library for symmetric encryption with SSH Agent
  *
- * ### Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
+ * ### Copyright (c) 2019-2022, Nicola Di Lieto <nicola.dilieto@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -144,6 +144,16 @@ extern "C" {
  *                             string specified is selected. If NULL the first
  *                             key is chosen automatically. Only RSA and ED25519
  *                             keys are supported.
+ *                             When using RSA keys, if the AGENTCRYPT_LEGACY
+ *                             environment variable is defined and not zero,
+ *                             RSA SHA1 signatures are used for encryption. This
+ *                             is not recommended and is only necessary if the
+ *                             encrypted data need to be decrypted using legacy
+ *                             openssh versions (older than 7.2) whose agent did
+ *                             not support RSA SHA256 signatures. Note that data
+ *                             encrypted using such legacy versions can always
+ *                             be decrypted correctly without needing to define
+ *                             this variable.
  * @param[in]  cleartext       Pointer to the data to be encrypted.
  * @param[in]  cleartext_size  Size of data to be encrypted.
  * @param[in]  pad_size        Padding size. A chunk of random data no larger
