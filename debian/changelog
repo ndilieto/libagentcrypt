@@ -1,3 +1,9 @@
+libagentcrypt (1.0.6-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Nicola Di Lieto <nicola.dilieto@gmail.com>  Sun, 12 Jun 2022 16:04:13 +0200
+
 libagentcrypt (1.0.5-4) unstable; urgency=medium
 
   * make debian/watch file check upstream git repository
