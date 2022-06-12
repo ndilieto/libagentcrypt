@@ -943,6 +943,13 @@ be restored to their original form using <strong>agentcrypt -d</strong>.</p></di
 <div class="sectionbody">
 <div class="paragraph"><p><strong>agentcrypt</strong> takes the path to the SSH Agent UNIX-domain socket from the
 <em>SSH_AUTH_SOCK</em> environment variable.</p></div>
+<div class="paragraph"><p>When using RSA keys, if the <em>AGENTCRYPT_LEGACY</em> environment variable is
+defined and not zero, <strong>agentcrypt</strong> asks the SSH Agent to produce legacy
+RSA SHA1 signatures during encryption. This is not recommended and is
+only necessary if the encrypted data need to be decrypted using legacy
+openssh versions (older than 7.2) whose agent did not support RSA SHA256
+signatures. Note that data encrypted using such legacy versions can
+always be decrypted correctly without needing to define this variable.</p></div>
 </div>
 </div>
 <div class="sect1">
@@ -998,9 +1005,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p></div>
 <div id="footnotes"><hr></div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.5<br>
+Version 1.0.6<br>
 Last updated
- 2019-06-12 20:53:41 CEST
+ 2022-06-12 15:39:18 CEST
 </div>
 </div>
 </body>

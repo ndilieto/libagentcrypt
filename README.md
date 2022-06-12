@@ -37,7 +37,7 @@ If you have any suggestions for improvements, pull requests are welcome.
 
 ## Copyright
 
-Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
+Copyright (c) 2019-2022, Nicola Di Lieto <nicola.dilieto@gmail.com>
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

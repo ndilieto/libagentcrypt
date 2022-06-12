@@ -1,4 +1,4 @@
-# Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
+# Copyright (c) 2019-2022, Nicola Di Lieto <nicola.dilieto@gmail.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -13,8 +13,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 AC_PREREQ(2.69)
-AC_INIT([libagentcrypt], [1.0.5])
-AC_COPYRIGHT([Copyright (c) 2019 Nicola Di Lieto <nicola.dilieto@gmail.com>])
+AC_INIT([libagentcrypt], [1.0.6])
+AC_COPYRIGHT([Copyright (c) 2019-2022 Nicola Di Lieto <nicola.dilieto@gmail.com>])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([build-aux/m4])
 AC_CONFIG_SRCDIR([libagentcrypt.c])
