@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
+ * Copyright (c) 2019-2022, Nicola Di Lieto <nicola.dilieto@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -783,7 +783,9 @@ int agc_encrypt(const char *agent, const char *key_sha256,
     {
         goto done;
     }
-    if (agent_sign(fd, key_blob, nonce, data - nonce, NULL, key) < 0)
+    const char *tmp = getenv("AGENTCRYPT_LEGACY");
+    bool legacy = tmp && atoi(tmp) != 0;
+    if (agent_sign(fd, key_blob, nonce, data - nonce, &legacy, key) < 0)
     {
         goto done;
     }

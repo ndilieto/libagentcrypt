@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Nicola Di Lieto <nicola.dilieto@gmail.com>
+ * Copyright (c) 2019-2022, Nicola Di Lieto <nicola.dilieto@gmail.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -411,7 +411,7 @@ static void usage(const char *progname)
 static void version(const char *progname)
 {
     fprintf(stderr, "%s %s (https://github.com/ndilieto/libagentcrypt)\n"
-            "Copyright (C) 2019 Nicola Di Lieto\nYou may redistribute "
+            "Copyright (C) 2019-2022 Nicola Di Lieto\nYou may redistribute "
             "this program under the terms of the ISC license.\n",
     progname, PACKAGE_VERSION);
 }

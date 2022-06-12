@@ -108,6 +108,13 @@ ENVIRONMENT
 *agentcrypt* takes the path to the SSH Agent UNIX-domain socket from the
 'SSH_AUTH_SOCK' environment variable.
 
+When using RSA keys, if the 'AGENTCRYPT_LEGACY' environment variable is
+defined and not zero, *agentcrypt* asks the SSH Agent to produce legacy
+RSA SHA1 signatures during encryption. This is not recommended and is
+only necessary if the encrypted data need to be decrypted using legacy
+openssh versions (older than 7.2) whose agent did not support RSA SHA256
+signatures. Note that data encrypted using such legacy versions can
+always be decrypted correctly without needing to define this variable.
 
 EXIT STATUS
 -----------

@@ -1,8 +1,8 @@
-.TH "libagentcrypt.h" 3 "Sun Jun 23 2019" "Version 1.0.5" "libagentcrypt" \" -*- nroff -*-
+.TH "libagentcrypt.h" 3 "Sun Jun 12 2022" "Version 1.0.6" "libagentcrypt" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-libagentcrypt.h \- Symmetric encryption with SSH Agent
+libagentcrypt.h
 .SH SYNOPSIS
 .br
 .PP
@@ -12,43 +12,43 @@ libagentcrypt.h \- Symmetric encryption with SSH Agent
 .ti -1c
 .RI "int \fBagc_encrypt\fP (const char *agent, const char *key_sha256, const uint8_t *cleartext, size_t cleartext_size, size_t pad_size, uint8_t **ciphertext, size_t *ciphertext_size)"
 .br
-.RI "\fIEncrypt and authenticate a block of data, for later decryption by \fBagc_decrypt()\fP \fP"
+.RI "Encrypt and authenticate a block of data, for later decryption by \fBagc_decrypt()\fP "
 .ti -1c
 .RI "int \fBagc_decrypt\fP (const char *agent, const uint8_t *ciphertext, size_t ciphertext_size, uint8_t **cleartext, size_t *cleartext_size)"
 .br
-.RI "\fIDecrypt and verify a block of data encrypted by \fBagc_encrypt()\fP \fP"
+.RI "Decrypt and verify a block of data encrypted by \fBagc_encrypt()\fP "
 .ti -1c
 .RI "int \fBagc_fencrypt\fP (const char *agent, const char *key_sha256, FILE *f_cleartext, FILE *f_ciphertext)"
 .br
-.RI "\fIEncrypt a file for later decryption by \fBagc_fdecrypt()\fP \fP"
+.RI "Encrypt a file for later decryption by \fBagc_fdecrypt()\fP "
 .ti -1c
 .RI "int \fBagc_fdecrypt\fP (const char *agent, FILE *f_ciphertext, FILE *f_cleartext)"
 .br
-.RI "\fIDecrypt a file encrypted by \fBagc_fencrypt()\fP \fP"
+.RI "Decrypt a file encrypted by \fBagc_fencrypt()\fP "
 .ti -1c
 .RI "int \fBagc_to_b64\fP (const uint8_t *in, size_t in_size, char **out, size_t *out_size)"
 .br
-.RI "\fIEncode a block of data into a string (base64 format with no padding) \fP"
+.RI "Encode a block of data into a string (base64 format with no padding) "
 .ti -1c
 .RI "int \fBagc_from_b64\fP (const char *in, uint8_t **out, size_t *out_size)"
 .br
-.RI "\fIDecode a string (base64 format with no padding) to a block of data\&. \fP"
+.RI "Decode a string (base64 format with no padding) to a block of data\&. "
 .ti -1c
 .RI "int \fBagc_version\fP (void)"
 .br
-.RI "\fIReturn the library version\&. \fP"
+.RI "Return the library version\&. "
 .ti -1c
 .RI "void * \fBagc_malloc\fP (size_t size)"
 .br
-.RI "\fIDynamically allocate and lock a secure buffer\&. \fP"
+.RI "Dynamically allocate and lock a secure buffer\&. "
 .ti -1c
 .RI "void \fBagc_free\fP (void *buf, size_t size)"
 .br
-.RI "\fIZero fill, unlock and free a dynamically allocated secure buffer\&. \fP"
+.RI "Zero fill, unlock and free a dynamically allocated secure buffer\&. "
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "int agc_encrypt (const char *agent, const char *key_sha256, const uint8_t *cleartext, size_tcleartext_size, size_tpad_size, uint8_t **ciphertext, size_t *ciphertext_size)"
+.SS "int agc_encrypt (const char * agent, const char * key_sha256, const uint8_t * cleartext, size_t cleartext_size, size_t pad_size, uint8_t ** ciphertext, size_t * ciphertext_size)"
 
 .PP
 Encrypt and authenticate a block of data, for later decryption by \fBagc_decrypt()\fP 
@@ -63,7 +63,7 @@ Encrypt and authenticate a block of data, for later decryption by \fBagc_decrypt
 ssh-add -E sha256 -l 
 .fi
 .PP
- The string may or may not begin with 'SHA256:' The first key whose fingerprint starts with the string specified is selected\&. If NULL the first key is chosen automatically\&. Only RSA and ED25519 keys are supported\&. 
+ The string may or may not begin with 'SHA256:' The first key whose fingerprint starts with the string specified is selected\&. If NULL the first key is chosen automatically\&. Only RSA and ED25519 keys are supported\&. When using RSA keys, if the AGENTCRYPT_LEGACY environment variable is defined and not zero, RSA SHA1 signatures are used for encryption\&. This is not recommended and is only necessary if the encrypted data need to be decrypted using legacy openssh versions (older than 7\&.2) whose agent did not support RSA SHA256 signatures\&. Note that data encrypted using such legacy versions can always be decrypted correctly without needing to define this variable\&. 
 .br
 \fIcleartext\fP Pointer to the data to be encrypted\&. 
 .br
@@ -95,7 +95,7 @@ any other C library error, including socket errors while communicating with ssh-
 .RE
 .PP
 
-.SS "int agc_decrypt (const char *agent, const uint8_t *ciphertext, size_tciphertext_size, uint8_t **cleartext, size_t *cleartext_size)"
+.SS "int agc_decrypt (const char * agent, const uint8_t * ciphertext, size_t ciphertext_size, uint8_t ** cleartext, size_t * cleartext_size)"
 
 .PP
 Decrypt and verify a block of data encrypted by \fBagc_encrypt()\fP 
@@ -132,7 +132,7 @@ any other C library error, including socket errors while communicating with ssh-
 .RE
 .PP
 
-.SS "int agc_fencrypt (const char *agent, const char *key_sha256, FILE *f_cleartext, FILE *f_ciphertext)"
+.SS "int agc_fencrypt (const char * agent, const char * key_sha256, FILE * f_cleartext, FILE * f_ciphertext)"
 
 .PP
 Encrypt a file for later decryption by \fBagc_fdecrypt()\fP 
@@ -173,7 +173,7 @@ any other C library error, including socket errors while communicating with ssh-
 .RE
 .PP
 
-.SS "int agc_fdecrypt (const char *agent, FILE *f_ciphertext, FILE *f_cleartext)"
+.SS "int agc_fdecrypt (const char * agent, FILE * f_ciphertext, FILE * f_cleartext)"
 
 .PP
 Decrypt a file encrypted by \fBagc_fencrypt()\fP 
@@ -206,7 +206,7 @@ any other C library error, including socket errors while communicating with ssh-
 .RE
 .PP
 
-.SS "int agc_to_b64 (const uint8_t *in, size_tin_size, char **out, size_t *out_size)"
+.SS "int agc_to_b64 (const uint8_t * in, size_t in_size, char ** out, size_t * out_size)"
 
 .PP
 Encode a block of data into a string (base64 format with no padding) 
@@ -228,7 +228,7 @@ Encode a block of data into a string (base64 format with no padding)
 .RE
 .PP
 
-.SS "int agc_from_b64 (const char *in, uint8_t **out, size_t *out_size)"
+.SS "int agc_from_b64 (const char * in, uint8_t ** out, size_t * out_size)"
 
 .PP
 Decode a string (base64 format with no padding) to a block of data\&. 
@@ -259,7 +259,7 @@ an integer encoding the library version as 0xMMmmuu00 (MM=major, mm=minor, uu=mi
 .RE
 .PP
 
-.SS "void* agc_malloc (size_tsize)"
+.SS "void* agc_malloc (size_t size)"
 
 .PP
 Dynamically allocate and lock a secure buffer\&. 
@@ -275,7 +275,7 @@ pointer to buffer upon success, NULL otherwise\&. The buffer MUST be freed by ca
 .RE
 .PP
 
-.SS "void agc_free (void *buf, size_tsize)"
+.SS "void agc_free (void * buf, size_t size)"
 
 .PP
 Zero fill, unlock and free a dynamically allocated secure buffer\&. 
